@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from '@angular/common/http'
 import {map} from 'rxjs/operators'
 
-import {Planet} from '../DataSchemes.model'
+import {Planet, Resident, Film} from '../DataSchemes.model'
 import { Observable } from 'rxjs';
 
 @Injectable({providedIn:'root'})
@@ -12,15 +12,31 @@ export class ApiConnectionService {
 
     constructor(private http: HttpClient) {}
 
-    getPlanetPage(page: number = 1) {
+    getPlanetPage(page: number = 1): Observable<Planet[]> {
        const path = this.API_URL + this.API_PLANET_RESOURCE
        const queryParams = new HttpParams().set('page',`${page}`) 
 
-       this.fetchPlanet(path, queryParams).subscribe(data=> console.log(data))
+       return this.fetchPlanet(path, queryParams)
     }
 
-    getPlanetByUrl(url: string) {
-       this.fetchPlanet(url).subscribe(data=> console.log(data))
+    getPlanetByUrl(url: string): Observable<Planet[]> {
+       return this.fetchPlanet(url)
+    }
+
+    getResidentByUrl(url: string): Observable<Resident> {
+      return this.fetchData(url).pipe(map ((data): Resident => {
+            return {
+                name: data['name']
+            }
+        }))
+    }    
+
+    getFilmByUrl(url: string): Observable<Film> {
+      return  this.fetchData(url).pipe(map((data): Film=> {
+            return {
+                title: data['title']
+            }
+        }))
     }
 
     private fetchPlanet(url: string, params?: HttpParams){
@@ -41,7 +57,6 @@ export class ApiConnectionService {
                     films: null
                 })
             })
-           
             return planetPage
         }))
     }
