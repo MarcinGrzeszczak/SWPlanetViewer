@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 
 @Injectable({providedIn:'root'})
 export class ApiConnectionService {
@@ -9,6 +9,9 @@ export class ApiConnectionService {
     constructor(private http: HttpClient) {}
 
     getPlanetPage(page: number = 1) {
-        this.http.get(this.API_URL + this.API_RESOURCE).subscribe(data => console.log(data))
+        this.http.get(
+            this.API_URL + this.API_RESOURCE, 
+            {params: new HttpParams().set('page',`${page}`)})
+            .subscribe(data => console.log(data))
     }
 }
