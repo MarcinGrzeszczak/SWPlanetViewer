@@ -6,7 +6,7 @@ export interface Planet {
     climate: string,
     gravity: string,
     terrain: string,
-    surface_water: string,
+    surfaceWater: string,
     population: string,
     residents: Resident[],
     films: Film[]
