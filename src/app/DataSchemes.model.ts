@@ -9,7 +9,9 @@ export interface Planet {
     surfaceWater: string,
     population: string,
     residents: Resident[],
-    films: Film[]
+    films: Film[],
+    _filmsUrls: string[],
+    _residentsUrls: string[]
 }
 
 export interface Resident {

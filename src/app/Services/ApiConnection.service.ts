@@ -5,6 +5,11 @@ import {map} from 'rxjs/operators'
 import {Planet, Resident, Film} from '../DataSchemes.model'
 import { Observable } from 'rxjs';
 
+export interface ApiPlanetData {
+    count: number,
+    planets: Planet[]
+}
+
 @Injectable({providedIn:'root'})
 export class ApiConnectionService {
     private API_URL = 'https://swapi.dev/api'
@@ -12,14 +17,14 @@ export class ApiConnectionService {
 
     constructor(private http: HttpClient) {}
 
-    getPlanetPage(page: number = 1): Observable<Planet[]> {
+    getPlanetPage(page: number = 1): Observable<ApiPlanetData> {
        const path = this.API_URL + this.API_PLANET_RESOURCE
        const queryParams = new HttpParams().set('page',`${page}`) 
 
        return this.fetchPlanet(path, queryParams)
     }
 
-    getPlanetByUrl(url: string): Observable<Planet[]> {
+    getPlanetByUrl(url: string): Observable<ApiPlanetData> {
        return this.fetchPlanet(url)
     }
 
@@ -40,7 +45,7 @@ export class ApiConnectionService {
     }
 
     private fetchPlanet(url: string, params?: HttpParams){
-       return this.fetchData(url,params).pipe(map ( (data):Planet[] => {
+       return this.fetchData(url,params).pipe(map ( (data):ApiPlanetData => {
             const planetPage: Planet[] = []
             data['results'].forEach(planet => {
                 planetPage.push({
@@ -54,10 +59,12 @@ export class ApiConnectionService {
                     surfaceWater:planet['surface_water'],
                     population: planet['population'],
                     residents: null,
-                    films: null
+                    films: null,
+                    _filmsUrls: planet['films'],
+                    _residentsUrls: planet['residents']
                 })
             })
-            return planetPage
+            return {count: +data['count'] , planets:planetPage}
         }))
     }
 
