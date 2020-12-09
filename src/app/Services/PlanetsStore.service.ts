@@ -47,7 +47,6 @@ export class PlanetsStoreService {
         return of(this.planetsStore[planetStoreID].films)
             .pipe(switchMap(data => {
                 if(this.planetsStore[planetStoreID].films === null && this.planetsStore[planetStoreID]._filmsUrls.length > 0) {
-                    console.log('fetching residents')
                     return fetchResidents
                 }
                 return of(data)
