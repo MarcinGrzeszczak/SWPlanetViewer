@@ -7,31 +7,27 @@ import {switchMap, tap, map} from 'rxjs/operators'
 @Injectable({providedIn: 'root'})
 export class PlanetsStoreService {
     private planetsStore: Planet[] = []
-    count:number = 60
+    count:number = 0
+    pageSize:number = 10
 
     constructor(private api : ApiConnectionService) {}
 
 
-    getPlanets(start:number, end:number): Observable<Planet[]> {
+    getPlanets(page: number):Observable<Planet[]> {
+        console.log('get')
         console.log(this.planetsStore)
-
-        return new Observable( (observer: Observer<Planet[]>) => {
-            console.log('cache') 
-            if(start < 0 || start > this.count || start > end || end > this.count)
-                observer.error('WRONG INDEX DATA')
-            observer.next(this.planetsStore)
-        }).pipe(
-            switchMap(data => {
-                console.log('switch')
-                if(start > this.planetsStore.length && start < this.count && end > this.planetsStore.length && end < this.count ){
-                    console.log('fetching')
-                    return this.api.getPlanetPage(1).pipe(tap(data => this.planetsStore.push(...data)))
+        const startElement = page * this.pageSize
+        const fetchDatFromServer = this.api.getPlanetPage(page).pipe(tap(data=> this.planetsStore.push(...data)))
+        return of(this.planetsStore.slice(startElement, startElement + this.pageSize))
+            .pipe(switchMap(data => {
+                if(this.planetsStore.length < startElement){
+                console.log('fetching')
+                return fetchDatFromServer
                 }
                 return of(data)
-            }),
-            map(data => data.slice(start,end))
-        )
-
+            }))
+            
+        
     }
 
 }
