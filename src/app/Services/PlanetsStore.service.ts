@@ -14,8 +14,6 @@ export class PlanetsStoreService {
 
 
     getPlanets(page: number):Observable<Planet[]> {
-        console.log('get')
-        console.log(this.planetsStore)
         const startElement = page * this.pageSize
         const fetchDatFromServer = this.api.getPlanetPage(page).pipe(tap(data=>{
             this.count = data.count
@@ -25,7 +23,6 @@ export class PlanetsStoreService {
         return of(this.planetsStore.slice(startElement, startElement + this.pageSize))
             .pipe(switchMap(data => {
                 if(this.planetsStore.length < startElement){
-                    console.log('fetching')
                     return fetchDatFromServer.pipe(map(planetsData => planetsData.planets))
                 }
                 return of(data)
@@ -38,7 +35,6 @@ export class PlanetsStoreService {
         return of(this.planetsStore[planetStoreID].residents)
             .pipe(switchMap(data => {
                 if(this.planetsStore[planetStoreID].residents === null && this.planetsStore[planetStoreID]._residentsUrls.length > 0) {
-                    console.log('fetching residents')
                     return fetchResidents
                 }
                 return of(data)
