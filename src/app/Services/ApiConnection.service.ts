@@ -54,7 +54,9 @@ export class ApiConnectionService {
                     surfaceWater:planet['surface_water'],
                     population: planet['population'],
                     residents: null,
-                    films: null
+                    films: null,
+                    _filmsUrls: planet['films'],
+                    _residentsUrls: planet['residents']
                 })
             })
             return planetPage
