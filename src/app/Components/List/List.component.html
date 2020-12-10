@@ -1,4 +1,6 @@
-<section *ngIf="isDataLoaded">
+<section>
+    <app-loading-indicator *ngIf="!isDataLoaded"></app-loading-indicator>
+    <div *ngIf="isDataLoaded">
         <table mat-table [dataSource]="pageData" class="mat-elevation-z8">
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef>Nazwa</th>
@@ -24,4 +26,5 @@
         [pageSizeOptions]="[5, 10, 25, 100]"
         (page)="loadPageData($event)">
         </mat-paginator>
+    </div>
 </section>  

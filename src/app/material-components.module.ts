@@ -3,19 +3,21 @@ import {MatButtonModule} from '@angular/material/button'
 import {MatToolbarModule} from '@angular/material/toolbar'
 import {MatTableModule} from '@angular/material/table'
 import {MatPaginatorModule} from '@angular/material/paginator'
-
-@NgModule({
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
+ @NgModule({
     imports: [
         MatButtonModule,
         MatToolbarModule,
         MatTableModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatProgressSpinnerModule
     ],
     exports: [
         MatButtonModule,
         MatToolbarModule,
         MatTableModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatProgressSpinnerModule
     ]
 })
 export class MaterialComponents {}

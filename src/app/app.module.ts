@@ -10,13 +10,15 @@ import { AppComponent } from './app.component';
 import {HeaderComponent} from './Components/Header/Header.component'
 import {FooterComponent} from './Components/Footer/Footer.component'
 import {ListComponent} from './Components/List/List.component'
- 
+import {LoadingIndicatorComponent} from './Components/LoadingIndicator/LoadingIndicator.component' 
+
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    ListComponent
+    ListComponent,
+    LoadingIndicatorComponent
   ],
   imports: [
     BrowserModule,
