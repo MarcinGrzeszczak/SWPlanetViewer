@@ -58,10 +58,8 @@ export class PlanetsStoreService {
         const loadRestPages = this.getPlanets(currentPage).pipe(
             expand(() =>{
                 if(currentPage > this.count / this.pageSize){
-                    console.log('quit')
                     return of()
                 }
-                console.log('not quit')
                 return this.getPlanets(currentPage++)
             })
         )

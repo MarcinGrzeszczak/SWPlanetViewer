@@ -25,7 +25,6 @@ export class ListComponent implements OnInit{
     loadPageData(pageEvent: PageEvent) {
         const start = pageEvent.pageIndex * pageEvent.pageSize
         const end = start + pageEvent.pageSize
-        console.log(`start: ${start} end: ${end}`)
         this.pageData = this.planetsList.slice(start,end)
     }
 
