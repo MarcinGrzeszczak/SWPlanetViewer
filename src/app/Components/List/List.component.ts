@@ -29,11 +29,20 @@ export class ListComponent implements OnInit{
         this.pageData = this.planetsList.slice(start,end)
     }
 
+    private sortData() {
+        this.planetsList = this.planetsList.sort((a, b) => {
+            if(a.name > b.name) return 1
+            if(a.name < b.name) return -1
+            return 0
+        })
+    }
+
     ngOnInit() {
         this.store.getAllPlanets().subscribe(data =>{ 
             this.planetsList.push(...data)
         },error => console.log(error), 
         ()=> {
+            this.sortData()
             this.isDataLoaded = true
             this.paginatorLength = this.planetsList.length
             this.pageData = this.planetsList.slice(0,this.pageSize)
