@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from '@angular/common/http'
 import {map} from 'rxjs/operators'
 
+import ShortUniqueId from 'short-unique-id'
+
 import {Planet, Resident, Film} from '../DataSchemes.model'
 import { Observable } from 'rxjs';
 
@@ -14,8 +16,13 @@ export interface ApiPlanetData {
 export class ApiConnectionService {
     private API_URL = 'https://swapi.dev/api'
     private API_PLANET_RESOURCE = '/planets'
+    private shortId: ShortUniqueId
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+        this.shortId = new ShortUniqueId({
+            length: 2
+        })
+    }
 
     getPlanetPage(page: number = 1): Observable<ApiPlanetData> {
        const path = this.API_URL + this.API_PLANET_RESOURCE
@@ -49,6 +56,7 @@ export class ApiConnectionService {
             const planetPage: Planet[] = []
             data['results'].forEach(planet => {
                 planetPage.push({
+                    storeID: this.shortId.randomUUID(),
                     name: planet['name'],
                     rotationPeriod: planet['rotation_period'],
                     oribtalPeriod: planet['orbital_period'],

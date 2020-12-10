@@ -1,4 +1,5 @@
 export interface Planet {
+    storeID: string,
     name: string,
     rotationPeriod: string,
     oribtalPeriod: string,
