@@ -9,12 +9,18 @@ import {Planet} from '../../DataSchemes.model'
     styleUrls: ['./List.component.css']
 })
 export class ListComponent implements OnInit{
+    isDataLoaded = false
     displyedColumns: string[] = ['name','climate','gravity','population']
     planetsList: Planet[] = []
 
     constructor(private store: PlanetsStoreService) {}
 
     ngOnInit() {
-        this.store.getPlanets(1).subscribe(planets => this.planetsList.push(...planets))
+        this.store.getAllPlanets().subscribe(data =>{ 
+            this.planetsList.push(...data)
+        },error => console.log(error), 
+        ()=> {
+            this.isDataLoaded = true
+        })
     }
 }

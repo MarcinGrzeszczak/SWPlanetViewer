@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ApiConnectionService } from './ApiConnection.service';
 import {Planet, Resident, Film} from '../DataSchemes.model'
-import { Observable, Observer, of, forkJoin } from 'rxjs';
-import {switchMap, tap, map} from 'rxjs/operators'
+import { Observable, of, forkJoin, concat } from 'rxjs';
+import {switchMap, tap, map, expand} from 'rxjs/operators'
 
 @Injectable({providedIn: 'root'})
 export class PlanetsStoreService {
@@ -15,7 +15,7 @@ export class PlanetsStoreService {
 
     getPlanets(page: number):Observable<Planet[]> {
         const startElement = page * this.pageSize
-        const fetchDatFromServer = this.api.getPlanetPage(page).pipe(tap(data=>{
+        const fetchDataFromServer = this.api.getPlanetPage(page).pipe(tap(data=>{
             this.count = data.count
             this.planetsStore.push(...data.planets)
         }))
@@ -23,7 +23,7 @@ export class PlanetsStoreService {
         return of(this.planetsStore.slice(startElement, startElement + this.pageSize))
             .pipe(switchMap(data => {
                 if(this.planetsStore.length < startElement){
-                    return fetchDatFromServer.pipe(map(planetsData => planetsData.planets))
+                    return fetchDataFromServer.pipe(map(planetsData => planetsData.planets))
                 }
                 return of(data)
             }))
@@ -51,6 +51,22 @@ export class PlanetsStoreService {
                 }
                 return of(data)
             }))
+    }
+
+    getAllPlanets() {
+        let currentPage = 2
+        const loadRestPages = this.getPlanets(currentPage).pipe(
+            expand(() =>{
+                if(currentPage > this.count / this.pageSize){
+                    console.log('quit')
+                    return of()
+                }
+                console.log('not quit')
+                return this.getPlanets(currentPage++)
+            })
+        )
+        return concat(this.getPlanets(1),loadRestPages)
+    
     }
 
 }

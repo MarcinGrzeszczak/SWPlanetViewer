@@ -1,4 +1,4 @@
-<section *ngIf="planetsList.length > 0">
+<section *ngIf="isDataLoaded">
     <table mat-table [dataSource]="planetsList" class="mat-elevation-z8">
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Nazwa</th>
