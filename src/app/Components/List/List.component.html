@@ -1,0 +1,22 @@
+<section *ngIf="planetsList.length > 0">
+    <table mat-table [dataSource]="planetsList" class="mat-elevation-z8">
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Nazwa</th>
+            <td mat-cell *matCellDef="let planet">{{planet.name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="climate">
+            <th mat-header-cell *matHeaderCellDef>Klimat</th>
+            <td mat-cell *matCellDef="let planet">{{planet.climate}}</td>
+        </ng-container>
+        <ng-container matColumnDef="gravity">
+            <th mat-header-cell *matHeaderCellDef>Grawitacja</th>
+            <td mat-cell *matCellDef="let planet">{{planet.gravity}}</td>
+        </ng-container>
+        <ng-container matColumnDef="population">
+            <th mat-header-cell *matHeaderCellDef>Populacja</th>
+            <td mat-cell *matCellDef="let planet">{{planet.population}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displyedColumns"></tr>
+        <tr class="table-row" mat-row *matRowDef="let row; columns: displyedColumns;"></tr>
+    </table>
+</section>  
