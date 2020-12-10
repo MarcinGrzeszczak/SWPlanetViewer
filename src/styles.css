@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+
+@font-face {
+    font-family: 'StarJediRounded';
+    src: url('./assets/StarJediRounded-jW3R.ttf') format("truetype"),
+         url('./assets/StarJediRounded-jW3R.woff2') format("woff2");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

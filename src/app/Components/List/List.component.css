@@ -1,0 +1,8 @@
+table {
+    width:100%;
+}
+
+.table-row:hover {
+    transition: .5s background-color;
+    background-color: rgb(50, 50, 50);
+}

@@ -1,0 +1,25 @@
+.footer_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 80%;
+    height: 40px;
+}
+
+.footer_links {
+    list-style: none;
+}
+
+.footer_links li:first-of-type {
+    margin-bottom: 5px ;
+}
+
+p {
+    margin: 0;
+    line-height: 100%;
+}
+
+a, a:active {
+    text-decoration: underline;
+    color: #fff;
+}
