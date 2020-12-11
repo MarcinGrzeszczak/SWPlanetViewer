@@ -10,7 +10,8 @@ import { AppComponent } from './app.component';
 import {HeaderComponent} from './Components/Header/Header.component'
 import {FooterComponent} from './Components/Footer/Footer.component'
 import {ListComponent} from './Components/List/List.component'
-import {LoadingIndicatorComponent} from './Components/LoadingIndicator/LoadingIndicator.component' 
+import {LoadingIndicatorComponent} from './Components/LoadingIndicator/LoadingIndicator.component';
+import {DetailsComponent} from './Components/Details/Details.component'
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {LoadingIndicatorComponent} from './Components/LoadingIndicator/LoadingIn
     HeaderComponent,
     FooterComponent,
     ListComponent,
-    LoadingIndicatorComponent
+    LoadingIndicatorComponent,
+    DetailsComponent
   ],
   imports: [
     BrowserModule,
