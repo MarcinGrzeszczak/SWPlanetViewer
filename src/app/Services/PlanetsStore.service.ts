@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiConnectionService } from './ApiConnection.service';
-import {Planet, Resident, Film} from '../DataSchemes.model'
-import { Observable, Observer,Subscriber, of, forkJoin, concat } from 'rxjs';
+import {Planet, Resident, Film,PlanetDetails} from '../DataSchemes.model'
+import { Observable,Subject, of, forkJoin, concat } from 'rxjs';
 import {switchMap, tap, map, expand} from 'rxjs/operators'
 
 @Injectable({providedIn: 'root'})
@@ -27,6 +27,16 @@ export class PlanetsStoreService {
                 }
                 return of(data)
             }))
+    }
+
+    getPlanetDetails(planetName: string): Observable<PlanetDetails> {
+        return new Observable (observer => {
+            const selectedPlanet = this.planetsStore.filter(planet => planet.name === planetName)
+            if(selectedPlanet.length === 0)
+                return observer.error('planet not found')
+            observer.next(selectedPlanet[0].details)
+            observer.complete()
+        })
     }
 
     getResidents(planetName: string): Observable<Resident[]> {
