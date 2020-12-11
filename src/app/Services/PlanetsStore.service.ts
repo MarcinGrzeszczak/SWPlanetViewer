@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiConnectionService } from './ApiConnection.service';
 import {Planet, Resident, Film} from '../DataSchemes.model'
-import { Observable, of, forkJoin, concat } from 'rxjs';
+import { Observable, Observer,Subscriber, of, forkJoin, concat } from 'rxjs';
 import {switchMap, tap, map, expand} from 'rxjs/operators'
 
 @Injectable({providedIn: 'root'})
@@ -29,28 +29,47 @@ export class PlanetsStoreService {
             }))
     }
 
-    getResidents(planetStoreID: number): Observable<Resident[]> {
-        const fetchResidents = forkJoin(this.planetsStore[planetStoreID]._residentsUrls.map(url => this.api.getResidentByUrl(url)))
-            .pipe(tap(residents => this.planetsStore[planetStoreID].residents = residents))
-        return of(this.planetsStore[planetStoreID].residents)
-            .pipe(switchMap(data => {
-                if(this.planetsStore[planetStoreID].residents === null && this.planetsStore[planetStoreID]._residentsUrls.length > 0) {
-                    return fetchResidents
-                }
+    getResidents(planetName: string): Observable<Resident[]> {
+        const selectedPlanet = this.planetsStore.filter(planet => planet.name === planetName)
+        return new Observable(observer => {
+            if(selectedPlanet.length === 0)
+                return observer.error('planet not found')
+            observer.next(selectedPlanet[0].residents)
+            observer.complete()
+        }).pipe(
+            switchMap((data:Resident[]) => {
+                if(data === null)
+                    return this.fetchResidents(selectedPlanet[0])
                 return of(data)
-            }))
+            })
+        )
     }
 
-    getFilms(planetStoreID: number): Observable<Film[]> {
-        const fetchResidents = forkJoin(this.planetsStore[planetStoreID]._filmsUrls.map(url => this.api.getFilmByUrl(url)))
-            .pipe(tap(films => this.planetsStore[planetStoreID].films = films))
-        return of(this.planetsStore[planetStoreID].films)
-            .pipe(switchMap(data => {
-                if(this.planetsStore[planetStoreID].films === null && this.planetsStore[planetStoreID]._filmsUrls.length > 0) {
-                    return fetchResidents
-                }
+    getFilms(planetName: string): Observable<Film[]> {
+        const selectedPlanet = this.planetsStore.filter(planet => planet.name === planetName)
+
+        return new Observable( (observer)=> {
+            if(selectedPlanet.length === 0)
+                return observer.error("planet not found")
+            observer.next(selectedPlanet[0].films)
+            observer.complete()
+        }).pipe(
+            switchMap((data:Film[]) => {
+                if(data === null)
+                    return this.fetchFilms(selectedPlanet[0])
                 return of(data)
-            }))
+            })
+        )
+    }
+
+    private fetchResidents(planet: Planet): Observable<Resident[]> {
+        return  forkJoin(planet._residentsUrls.map(url => this.api.getResidentByUrl(url)))
+        .pipe(tap(residents => planet.residents = residents))
+    }
+
+    private fetchFilms(planet: Planet): Observable<Film[]> {
+        return forkJoin(planet._filmsUrls.map(url => this.api.getFilmByUrl(url)))
+        .pipe(tap(films => planet.films = films))
     }
 
     getAllPlanets() {
