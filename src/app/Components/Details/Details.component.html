@@ -1,15 +1,38 @@
 <h1 class="planet_name">NAME</h1>
 <mat-grid-list cols="2" rowHeight="2:1">
-    <mat-grid-tile class='tile' *ngFor="let tile of tiles">
+    <mat-grid-tile class='tile'>
         <mat-card class='card'>
-            <mat-card-header class='title'><h2>{{tile.title}}</h2></mat-card-header>
+            <mat-card-header class='title'><h2>Residents</h2></mat-card-header>
             <mat-card-content>
                 <mat-list role="list">
-                    <mat-list-item role="listitem" *ngFor="let item of tile.data">{{item}}</mat-list-item>
+                    <mat-list-item role="listitem" *ngFor="let item of residents">{{item.name}}</mat-list-item>
                 </mat-list>
             </mat-card-content>
         </mat-card>
     </mat-grid-tile>
+
+    <mat-grid-tile class='tile'>
+        <mat-card class='card'>
+            <mat-card-header class='title'><h2>Details</h2></mat-card-header>
+            <mat-card-content>
+                <mat-list role="list">
+                    <mat-list-item role="listitem" *ngFor="let detail of details | keyvalue"><b>{{detail.key}}: </b>{{detail.value}}</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+
+    <mat-grid-tile class='tile'>
+        <mat-card class='card'>
+            <mat-card-header class='title'><h2>Films</h2></mat-card-header>
+            <mat-card-content>
+                <mat-list role="list" *ngIf="details !== null">
+                    <mat-list-item role="listitem" *ngFor="let item of films">{{item.title}}</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+    
 </mat-grid-list>
 
    
