@@ -1,39 +1,44 @@
-<h1 class="planet_name">NAME</h1>
-<mat-grid-list cols="2" rowHeight="2:1">
-    <mat-grid-tile class='tile'>
-        <mat-card class='card'>
-            <mat-card-header class='title'><h2>Residents</h2></mat-card-header>
-            <mat-card-content>
-                <mat-list role="list">
-                    <mat-list-item role="listitem" *ngFor="let item of residents">{{item.name}}</mat-list-item>
-                </mat-list>
-            </mat-card-content>
-        </mat-card>
-    </mat-grid-tile>
+<h1 class="planet_name">{{planetName}}</h1>
+<div class='details_container'>
+    <mat-tab-group mat-align-tabs="center">
+        <mat-tab label="Details">
+            <app-loading-indicator *ngIf="!details.isLoaded"></app-loading-indicator>
+            <mat-list *ngIf="details.isLoaded" role="list">
+                <ng-container *ngFor="let detail of details.data | keyvalue">
+                    <mat-list-item role="listitem">
+                        <div class='list_item'>
+                            <p class='category'>{{detail.key}}:</p>
+                            <p>{{detail.value}}</p>
+                        </div>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                </ng-container>
+            </mat-list>
+        </mat-tab>
+        
+        <mat-tab label="Residents">
+            <app-loading-indicator *ngIf="!residents.isLoaded"></app-loading-indicator>
+            <mat-list *ngIf="residents.isLoaded" role="list">
+                <ng-container *ngFor="let item of residents.data">
+                    <mat-list-item role="listitem" >
+                        <p class='list_item'>{{item.name}}</p>
+                        <mat-divider></mat-divider>
+                    </mat-list-item>
+                </ng-container>
+            </mat-list>
+        </mat-tab>
 
-    <mat-grid-tile class='tile'>
-        <mat-card class='card'>
-            <mat-card-header class='title'><h2>Details</h2></mat-card-header>
-            <mat-card-content>
-                <mat-list role="list">
-                    <mat-list-item role="listitem" *ngFor="let detail of details | keyvalue"><b>{{detail.key}}: </b>{{detail.value}}</mat-list-item>
-                </mat-list>
-            </mat-card-content>
-        </mat-card>
-    </mat-grid-tile>
-
-    <mat-grid-tile class='tile'>
-        <mat-card class='card'>
-            <mat-card-header class='title'><h2>Films</h2></mat-card-header>
-            <mat-card-content>
-                <mat-list role="list" *ngIf="details !== null">
-                    <mat-list-item role="listitem" *ngFor="let item of films">{{item.title}}</mat-list-item>
-                </mat-list>
-            </mat-card-content>
-        </mat-card>
-    </mat-grid-tile>
-    
-</mat-grid-list>
-
-   
+        <mat-tab label="Films">
+            <app-loading-indicator *ngIf="!films.isLoaded"></app-loading-indicator>
+            <mat-list *ngIf="films.isLoaded" role="list">
+                <ng-container *ngFor="let item of films.data">
+                    <mat-list-item role="listitem" >
+                        <p class='list_item'>{{item.title}}</p>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                </ng-container>
+            </mat-list>
+        </mat-tab>
+    </mat-tab-group>
+</div>
 

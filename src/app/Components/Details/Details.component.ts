@@ -12,18 +12,20 @@ import {Film,Resident, PlanetDetails} from '../../DataSchemes.model'
 })
 
 export class DetailsComponent implements OnInit {
-  films: Film[] = [{title:"aaaaa"},{title:"aaaaa"},{title:"aaaaa"},{title:"aaaaa"},{title:"aaaaa"},{title:"aaaaa"},{title:"aaaaa"}]
-  residents: Resident[] = []
-  details: PlanetDetails = null
   constructor(private route: ActivatedRoute ,private store: PlanetsStoreService) { }
 
-
+  details = { data:{} , isLoaded: false}
+  residents = { data: [], isLoaded: false}
+  films = {data: [], isLoaded: false}
+  planetName=""
 
   ngOnInit(): void {
     const planetName =  this.route.snapshot.params['name']
+    this.planetName = planetName
     this.store.getFilms(planetName).subscribe(
         data => {
-          this.films = data
+          this.films.data = data
+          this.films.isLoaded = true
         },
         error => {
           console.log(error)
@@ -31,7 +33,8 @@ export class DetailsComponent implements OnInit {
     
     this.store.getResidents(planetName).subscribe(
       data => {
-        this.residents = data
+        this.residents.data = data
+        this.residents.isLoaded = true
       },
       error => {
         console.log(error)
@@ -39,8 +42,8 @@ export class DetailsComponent implements OnInit {
     )
 
     this.store.getPlanetDetails(planetName).subscribe(planet => {
-       this.details = <PlanetDetails> planet
-       console.log(this.details)
+      this.details.data = planet
+      this.details.isLoaded = true
     }) 
   }
 

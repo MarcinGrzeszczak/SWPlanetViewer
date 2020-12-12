@@ -4,9 +4,8 @@ import {MatToolbarModule} from '@angular/material/toolbar'
 import {MatTableModule} from '@angular/material/table'
 import {MatPaginatorModule} from '@angular/material/paginator'
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
-import {MatGridListModule} from '@angular/material/grid-list'
-import {MatCardModule} from '@angular/material/card'
 import {MatListModule} from '@angular/material/list'
+import {MatTabsModule} from '@angular/material/tabs'
 
  @NgModule({
     imports: [
@@ -15,9 +14,8 @@ import {MatListModule} from '@angular/material/list'
         MatTableModule,
         MatPaginatorModule,
         MatProgressSpinnerModule,
-        MatGridListModule,
-        MatCardModule,
-        MatListModule
+        MatListModule,
+        MatTabsModule
     ],
     exports: [
         MatButtonModule,
@@ -25,9 +23,8 @@ import {MatListModule} from '@angular/material/list'
         MatTableModule,
         MatPaginatorModule,
         MatProgressSpinnerModule,
-        MatGridListModule,
-        MatCardModule,
-        MatListModule
+        MatListModule,
+        MatTabsModule
     ]
 })
 export class MaterialComponents {}
