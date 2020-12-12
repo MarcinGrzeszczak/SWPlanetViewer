@@ -18,7 +18,7 @@
             <td mat-cell *matCellDef="let planet">{{planet.population}}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displyedColumns"></tr>
-        <tr class="table-row" mat-row *matRowDef="let row; columns: displyedColumns;"></tr>
+        <tr class="table-row" mat-row *matRowDef="let row; columns: displyedColumns;" (click) = "goToDetails(row)"></tr>
     </table>
     <mat-paginator [length]="60"
     [pageSize]="10"

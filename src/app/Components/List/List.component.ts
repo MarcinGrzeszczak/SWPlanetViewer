@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { PageEvent } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
+import {Router} from '@angular/router';
 import { PlanetsStoreService } from 'src/app/Services/PlanetsStore.service';
 
 import {PlanetDetails} from '../../DataSchemes.model'
@@ -20,8 +20,11 @@ export class ListComponent implements OnInit{
     displyedColumns: string[] = ['name','climate','gravity','population']
     
 
+    goToDetails(selectedPlanet:PlanetDetails) {
+        this.router.navigate(['/details', selectedPlanet.name])
+    }
 
-    constructor(private store: PlanetsStoreService) {}
+    constructor(private router: Router,private store: PlanetsStoreService) {}
 
     loadPageData(pageEvent: PageEvent) {
         const start = pageEvent.pageIndex * pageEvent.pageSize
