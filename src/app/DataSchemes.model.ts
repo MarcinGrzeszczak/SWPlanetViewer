@@ -1,4 +1,5 @@
 export interface PlanetDetails {
+    name: string,
     rotationPeriod: string,
     oribtalPeriod: string,
     diameter: string,
@@ -10,7 +11,6 @@ export interface PlanetDetails {
 }
 
 export interface Planet {
-    name: string,
     details: PlanetDetails,
     residents: Resident[],
     films: Film[],

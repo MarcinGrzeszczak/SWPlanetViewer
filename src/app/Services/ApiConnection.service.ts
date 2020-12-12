@@ -49,6 +49,7 @@ export class ApiConnectionService {
             const planetPage: Planet[] = []
             data['results'].forEach(planet => {
                 const details:PlanetDetails = {
+                    name: planet['name'],
                     rotationPeriod: planet['rotation_period'],
                     oribtalPeriod: planet['orbital_period'],
                     diameter: planet['diameter'],
@@ -59,7 +60,6 @@ export class ApiConnectionService {
                     population: planet['population'],
                 }
                 planetPage.push({
-                    name: planet['name'],
                     details,
                     residents: null,
                     films: null,

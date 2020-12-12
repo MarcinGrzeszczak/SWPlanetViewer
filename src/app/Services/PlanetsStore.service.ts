@@ -31,7 +31,7 @@ export class PlanetsStoreService {
 
     getPlanetDetails(planetName: string): Observable<PlanetDetails> {
         return new Observable (observer => {
-            const selectedPlanet = this.planetsStore.filter(planet => planet.name === planetName)
+            const selectedPlanet = this.planetsStore.filter(planet => planet.details.name === planetName)
             if(selectedPlanet.length === 0)
                 return observer.error('planet not found')
             observer.next(selectedPlanet[0].details)
@@ -40,7 +40,7 @@ export class PlanetsStoreService {
     }
 
     getResidents(planetName: string): Observable<Resident[]> {
-        const selectedPlanet = this.planetsStore.filter(planet => planet.name === planetName)
+        const selectedPlanet = this.planetsStore.filter(planet => planet.details.name === planetName)
         return new Observable(observer => {
             if(selectedPlanet.length === 0)
                 return observer.error('planet not found')
@@ -56,7 +56,7 @@ export class PlanetsStoreService {
     }
 
     getFilms(planetName: string): Observable<Film[]> {
-        const selectedPlanet = this.planetsStore.filter(planet => planet.name === planetName)
+        const selectedPlanet = this.planetsStore.filter(planet => planet.details.name === planetName)
 
         return new Observable( (observer)=> {
             if(selectedPlanet.length === 0)
