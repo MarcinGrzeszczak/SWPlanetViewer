@@ -10,7 +10,8 @@
 }
 
 .content {
-    margin: 30px 0;
+    width:90%;
+    margin: 30px auto;
     flex-grow: 1;
     position: relative;
 }
