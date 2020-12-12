@@ -13,7 +13,6 @@ export class AppComponent implements OnInit{
     ngOnInit() {
         this.store.getAllPlanets().subscribe(() => {
           this.isDataLoaded = true
-          console.log('bbbbb')
         })
     }
 }
