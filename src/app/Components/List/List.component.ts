@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { PageEvent } from '@angular/material/paginator';
 import { PlanetsStoreService } from 'src/app/Services/PlanetsStore.service';
 
-import {Planet} from '../../DataSchemes.model'
+import {PlanetDetails} from '../../DataSchemes.model'
 
 @Component({
     selector: 'app-list',
@@ -11,10 +11,10 @@ import {Planet} from '../../DataSchemes.model'
 })
 export class ListComponent implements OnInit{
     private pageSize = 10
-    private planetsList: Planet[] = []
+    private planetsList: PlanetDetails[] = []
     paginatorLength:number = 0
     paginatorSizeOptions:number[] = [5, this.pageSize, 25, 100]
-    pageData: Planet[] = []
+    pageData: PlanetDetails[] = []
     isDataLoaded = false
     displyedColumns: string[] = ['name','climate','gravity','population']
     
@@ -38,13 +38,13 @@ export class ListComponent implements OnInit{
 
     ngOnInit() {
         this.store.getAllPlanets().subscribe(data =>{ 
-            this.planetsList.push(...data)
+            this.planetsList.push(...data.map(planet=> planet.details))
         },error => console.log(error), 
         ()=> {
             this.sortData()
             this.isDataLoaded = true
             this.paginatorLength = this.planetsList.length
-            this.pageData = this.planetsList.slice(0,this.pageSize)
+            this.pageData
         })
     }
 }
