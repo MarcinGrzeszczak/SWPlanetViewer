@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
 import { ApiConnectionService } from './ApiConnection.service';
 import {Planet, Resident, Film,PlanetDetails} from '../DataSchemes.model'
-import { Observable,Subject, of, forkJoin, concat } from 'rxjs';
+import { Observable,Subject, of, forkJoin, concat, BehaviorSubject } from 'rxjs';
 import {switchMap, tap, map, expand, reduce} from 'rxjs/operators'
 
 @Injectable({providedIn: 'root'})
 export class PlanetsStoreService {
     private planetsStore: Planet[] = []
-    count:number = 0
-    pageSize:number = 10
+    private count:number = 0
+    private pageSize:number = 10
+    private currentPageIndex = 0
 
-    constructor(private api : ApiConnectionService) {}
+    statePageIndex = new BehaviorSubject<number>(0)
+
+    constructor(private api : ApiConnectionService) {
+    }
 
 
     getPlanets(page: number):Observable<Planet[]> {
