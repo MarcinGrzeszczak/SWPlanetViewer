@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiConnectionService } from './ApiConnection.service';
 import {Planet, Resident, Film,PlanetDetails} from '../DataSchemes.model'
 import { Observable,Subject, of, forkJoin, concat } from 'rxjs';
-import {switchMap, tap, map, expand} from 'rxjs/operators'
+import {switchMap, tap, map, expand, reduce} from 'rxjs/operators'
 
 @Injectable({providedIn: 'root'})
 export class PlanetsStoreService {
@@ -27,6 +27,10 @@ export class PlanetsStoreService {
                 }
                 return of(data)
             }))
+    }
+
+    getPlanetsCache():Observable<Planet[]> {
+        return of(this.planetsStore)
     }
 
     getPlanetDetails(planetName: string): Observable<PlanetDetails> {
@@ -89,10 +93,14 @@ export class PlanetsStoreService {
                 if(currentPage > this.count / this.pageSize){
                     return of()
                 }
-                return this.getPlanets(currentPage++)
+                return this.getPlanets(currentPage++).pipe()
             })
         )
-        return concat(this.getPlanets(1),loadRestPages)
+        return concat(this.getPlanets(1),loadRestPages).pipe(   
+            reduce((acc, curr)=> {
+            acc.push(...curr)
+            return acc
+        }, []))
     
     }
 

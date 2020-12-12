@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute } from '@angular/router';
 import { PlanetsStoreService } from 'src/app/Services/PlanetsStore.service';
 
 import {PlanetDetails} from '../../DataSchemes.model'
@@ -37,14 +38,12 @@ export class ListComponent implements OnInit{
     }
 
     ngOnInit() {
-        this.store.getAllPlanets().subscribe(data =>{ 
-            this.planetsList.push(...data.map(planet=> planet.details))
-        },error => console.log(error), 
-        ()=> {
-            this.sortData()
-            this.isDataLoaded = true
-            this.paginatorLength = this.planetsList.length
-            this.pageData
-        })
+         this.store.getPlanetsCache().subscribe(data => {
+                this.isDataLoaded = true
+                this.planetsList.push(... data.map(planet=> planet.details))
+                this.sortData()
+                this.pageData = this.planetsList.slice(0, this.pageSize)
+                this.paginatorLength = this.planetsList.length
+            })
     }
 }

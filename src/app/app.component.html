@@ -1,7 +1,8 @@
 <div class='container'>
     <app-header class='header'></app-header>
     <section class='content'>
-        <router-outlet></router-outlet>
+        <app-loading-indicator *ngIf="!isDataLoaded"></app-loading-indicator>
+        <router-outlet *ngIf='isDataLoaded'></router-outlet>
     </section>
     <app-footer class='footer'></app-footer>
 </div>
