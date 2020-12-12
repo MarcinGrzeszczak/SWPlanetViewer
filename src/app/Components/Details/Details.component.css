@@ -1,0 +1,32 @@
+.planet_name {
+    font-size: 300%;
+    font-weight: 100;
+}
+
+.planet_name::after {
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: white;
+    content: '';
+}
+
+.list_item {
+    font-style: italic;
+    width:300px;
+    font-weight: 100;
+    font-size: 135%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.category {
+    font-style: italic;
+    font-size: 70%;
+}
+
+.details_container {
+    width: 80%;
+    margin: 0 auto;
+}

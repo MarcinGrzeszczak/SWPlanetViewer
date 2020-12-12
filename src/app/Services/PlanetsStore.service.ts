@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ApiConnectionService } from './ApiConnection.service';
-import {Planet, Resident, Film} from '../DataSchemes.model'
-import { Observable, of, forkJoin, concat } from 'rxjs';
-import {switchMap, tap, map, expand} from 'rxjs/operators'
+import {Planet, Resident, Film,PlanetDetails} from '../DataSchemes.model'
+import { Observable,Subject, of, forkJoin, concat } from 'rxjs';
+import {switchMap, tap, map, expand, reduce} from 'rxjs/operators'
 
 @Injectable({providedIn: 'root'})
 export class PlanetsStoreService {
@@ -29,28 +29,61 @@ export class PlanetsStoreService {
             }))
     }
 
-    getResidents(planetStoreID: number): Observable<Resident[]> {
-        const fetchResidents = forkJoin(this.planetsStore[planetStoreID]._residentsUrls.map(url => this.api.getResidentByUrl(url)))
-            .pipe(tap(residents => this.planetsStore[planetStoreID].residents = residents))
-        return of(this.planetsStore[planetStoreID].residents)
-            .pipe(switchMap(data => {
-                if(this.planetsStore[planetStoreID].residents === null && this.planetsStore[planetStoreID]._residentsUrls.length > 0) {
-                    return fetchResidents
-                }
-                return of(data)
-            }))
+    getPlanetsCache():Observable<Planet[]> {
+        return of(this.planetsStore)
     }
 
-    getFilms(planetStoreID: number): Observable<Film[]> {
-        const fetchResidents = forkJoin(this.planetsStore[planetStoreID]._filmsUrls.map(url => this.api.getFilmByUrl(url)))
-            .pipe(tap(films => this.planetsStore[planetStoreID].films = films))
-        return of(this.planetsStore[planetStoreID].films)
-            .pipe(switchMap(data => {
-                if(this.planetsStore[planetStoreID].films === null && this.planetsStore[planetStoreID]._filmsUrls.length > 0) {
-                    return fetchResidents
-                }
+    getPlanetDetails(planetName: string): Observable<PlanetDetails> {
+        return new Observable (observer => {
+            const selectedPlanet = this.planetsStore.filter(planet => planet.details.name === planetName)
+            if(selectedPlanet.length === 0)
+                return observer.error('planet not found')
+            observer.next(selectedPlanet[0].details)
+            observer.complete()
+        })
+    }
+
+    getResidents(planetName: string): Observable<Resident[]> {
+        const selectedPlanet = this.planetsStore.filter(planet => planet.details.name === planetName)
+        return new Observable(observer => {
+            if(selectedPlanet.length === 0)
+                return observer.error('planet not found')
+            observer.next(selectedPlanet[0].residents)
+            observer.complete()
+        }).pipe(
+            switchMap((data:Resident[]) => {
+                if(data === null)
+                    return this.fetchResidents(selectedPlanet[0])
                 return of(data)
-            }))
+            })
+        )
+    }
+
+    getFilms(planetName: string): Observable<Film[]> {
+        const selectedPlanet = this.planetsStore.filter(planet => planet.details.name === planetName)
+
+        return new Observable( (observer)=> {
+            if(selectedPlanet.length === 0)
+                return observer.error("planet not found")
+            observer.next(selectedPlanet[0].films)
+            observer.complete()
+        }).pipe(
+            switchMap((data:Film[]) => {
+                if(data === null)
+                    return this.fetchFilms(selectedPlanet[0])
+                return of(data)
+            })
+        )
+    }
+
+    private fetchResidents(planet: Planet): Observable<Resident[]> {
+        return  forkJoin(planet._residentsUrls.map(url => this.api.getResidentByUrl(url)))
+        .pipe(tap(residents => planet.residents = residents))
+    }
+
+    private fetchFilms(planet: Planet): Observable<Film[]> {
+        return forkJoin(planet._filmsUrls.map(url => this.api.getFilmByUrl(url)))
+        .pipe(tap(films => planet.films = films))
     }
 
     getAllPlanets() {
@@ -60,10 +93,14 @@ export class PlanetsStoreService {
                 if(currentPage > this.count / this.pageSize){
                     return of()
                 }
-                return this.getPlanets(currentPage++)
+                return this.getPlanets(currentPage++).pipe()
             })
         )
-        return concat(this.getPlanets(1),loadRestPages)
+        return concat(this.getPlanets(1),loadRestPages).pipe(   
+            reduce((acc, curr)=> {
+            acc.push(...curr)
+            return acc
+        }, []))
     
     }
 

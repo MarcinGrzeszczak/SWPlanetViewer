@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from '@angular/common/http'
 import {map} from 'rxjs/operators'
 
-import {Planet, Resident, Film} from '../DataSchemes.model'
+import {Planet, Resident, Film, PlanetDetails} from '../DataSchemes.model'
 import { Observable } from 'rxjs';
 
 export interface ApiPlanetData {
@@ -48,7 +48,7 @@ export class ApiConnectionService {
        return this.fetchData(url,params).pipe(map ( (data):ApiPlanetData => {
             const planetPage: Planet[] = []
             data['results'].forEach(planet => {
-                planetPage.push({
+                const details:PlanetDetails = {
                     name: planet['name'],
                     rotationPeriod: planet['rotation_period'],
                     oribtalPeriod: planet['orbital_period'],
@@ -58,6 +58,9 @@ export class ApiConnectionService {
                     terrain: planet['terrain'],
                     surfaceWater:planet['surface_water'],
                     population: planet['population'],
+                }
+                planetPage.push({
+                    details,
                     residents: null,
                     films: null,
                     _filmsUrls: planet['films'],
