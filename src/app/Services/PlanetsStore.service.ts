@@ -9,9 +9,9 @@ export class PlanetsStoreService {
     private planetsStore: Planet[] = []
     private count:number = 0
     private pageSize:number = 10
-    private currentPageIndex = 0
-
+    
     statePageIndex = new BehaviorSubject<number>(0)
+    planetNotFoundSub = new Subject<boolean>()
 
     constructor(private api : ApiConnectionService) {
     }
