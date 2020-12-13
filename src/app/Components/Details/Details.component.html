@@ -5,8 +5,8 @@
             <app-loading-indicator *ngIf="!details.isLoaded"></app-loading-indicator>
             <mat-list *ngIf="details.isLoaded" role="list">
                 <ng-container *ngFor="let detail of details.data | keyvalue">
-                    <mat-list-item role="listitem">
-                        <div class='list_item'>
+                    <mat-list-item role="listitem" class="list_item">
+                        <div class='list_item_content'>
                             <p class='category'>{{detail.key}}:</p>
                             <p>{{detail.value}}</p>
                         </div>
@@ -21,7 +21,7 @@
             <mat-list *ngIf="residents.isLoaded" role="list">
                 <ng-container *ngFor="let item of residents.data">
                     <mat-list-item role="listitem" >
-                        <p class='list_item'>{{item.name}}</p>
+                        <p class='list_item_content'>{{item.name}}</p>
                         <mat-divider></mat-divider>
                     </mat-list-item>
                 </ng-container>
@@ -33,7 +33,7 @@
             <mat-list *ngIf="films.isLoaded" role="list">
                 <ng-container *ngFor="let item of films.data">
                     <mat-list-item role="listitem" >
-                        <p class='list_item'>{{item.title}}</p>
+                        <p class='list_item_content'>{{item.title}}</p>
                     </mat-list-item>
                     <mat-divider></mat-divider>
                 </ng-container>

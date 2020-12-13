@@ -13,17 +13,19 @@
 }
 
 .list_item {
+    margin: 15px 0 ;
+}
+
+.list_item_content{
     font-style: italic;
     width:300px;
     font-weight: 100;
     font-size: 135%;
-    display: flex;
-    justify-content: space-between;
 }
 
 .category {
     font-style: italic;
-    font-size: 70%;
+    font-size: 65%;
 }
 
 .details_container {
