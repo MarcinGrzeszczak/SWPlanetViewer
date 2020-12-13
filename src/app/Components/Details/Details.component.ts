@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PlanetsStoreService } from 'src/app/Services/PlanetsStore.service';
-import {Film,Resident, PlanetDetails} from '../../DataSchemes.model'
-
-
 
 @Component({
   selector: 'app-details',
@@ -28,7 +25,7 @@ export class DetailsComponent implements OnInit {
           this.films.isLoaded = true
         },
         error => {
-          console.log(error)
+          this.store.planetNotFoundSub.next(true)
         })
     
     this.store.getResidents(planetName).subscribe(
@@ -37,7 +34,7 @@ export class DetailsComponent implements OnInit {
         this.residents.isLoaded = true
       },
       error => {
-        console.log(error)
+        this.store.planetNotFoundSub.next(true)
       }
     )
 

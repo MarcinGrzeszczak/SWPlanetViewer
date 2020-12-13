@@ -12,6 +12,7 @@ import {FooterComponent} from './Components/Footer/Footer.component'
 import {ListComponent} from './Components/List/List.component'
 import {LoadingIndicatorComponent} from './Components/LoadingIndicator/LoadingIndicator.component';
 import {DetailsComponent} from './Components/Details/Details.component'
+import {NotFoundComponent} from './Components/NotFoundPage/NotFound.component'
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {DetailsComponent} from './Components/Details/Details.component'
     FooterComponent,
     ListComponent,
     LoadingIndicatorComponent,
-    DetailsComponent
+    DetailsComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
