@@ -10,8 +10,10 @@ export class PlanetsStoreService {
     private count:number = 0
     private pageSize:number = 10
     
+    statePageSize = new BehaviorSubject<number>(this.pageSize)
     statePageIndex = new BehaviorSubject<number>(0)
     planetNotFoundSub = new Subject<boolean>()
+
 
     constructor(private api : ApiConnectionService) {
     }

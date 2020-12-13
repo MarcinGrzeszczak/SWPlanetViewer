@@ -2,7 +2,8 @@ import { BreakpointObserver } from "@angular/cdk/layout";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { PageEvent } from '@angular/material/paginator';
 import {Router} from '@angular/router';
-import {Subscription } from "rxjs";
+import {concat, Subscription } from "rxjs";
+import { flatMap, mergeMap } from "rxjs/operators";
 import { PlanetsStoreService } from 'src/app/Services/PlanetsStore.service';
 
 import {PlanetDetails} from '../../DataSchemes.model'
@@ -15,14 +16,14 @@ import {PlanetDetails} from '../../DataSchemes.model'
 export class ListComponent implements OnInit, OnDestroy{
     private queryMin767Sub: Subscription
     private queryMax767Sub: Subscription
-    private planetsCacheSubscription: Subscription
-    private statePageIndexSubscription: Subscription
-    private pageSize = 10 
+    private storeSubscription: Subscription
+
     private planetsList: PlanetDetails[] = []
     private columns = ['name','climate','gravity','population',]
     pageIndex = 0
     paginatorLength:number = 0
-    paginatorSizeOptions:number[] = [5, this.pageSize, 25, 100]
+    currPageSize = 10
+    paginatorSizeOptions:number[] = [5,10, 25, 100]
     pageData: PlanetDetails[] = []
     isDataLoaded = false
     displyedColumns: string[] = []
@@ -30,6 +31,7 @@ export class ListComponent implements OnInit, OnDestroy{
 
     goToDetails(selectedPlanet:PlanetDetails) {
         this.store.statePageIndex.next(this.pageIndex)
+        this.store.statePageSize.next(this.currPageSize)
         this.router.navigate(['/details', selectedPlanet.name])
     }
 
@@ -39,13 +41,14 @@ export class ListComponent implements OnInit, OnDestroy{
         private breakPointObserver: BreakpointObserver) {}
 
     loadPageData(pageEvent: PageEvent) {
+        this.currPageSize = pageEvent.pageSize
         this.pageIndex = pageEvent.pageIndex
         this.sliceDataToPage()
     }
 
     sliceDataToPage() {
-        const start = this.pageIndex * this.pageSize
-        const end = start + this.pageSize
+        const start = this.pageIndex * this.currPageSize
+        const end = start + this.currPageSize
         this.pageData = this.planetsList.slice(start,end)
     }
 
@@ -74,21 +77,27 @@ export class ListComponent implements OnInit, OnDestroy{
 
     ngOnInit() {
         this.queries()
-        this.statePageIndexSubscription = this.store.statePageIndex.subscribe(num =>{ 
-            this.pageIndex = num})
-
-        this.planetsCacheSubscription = this.store.getPlanetsCache().subscribe(data => {
-                this.isDataLoaded = true
-                this.planetsList.push(... data.map(planet=> planet.details))
+        this.storeSubscription =
+            this.store.getPlanetsCache().pipe(
+                mergeMap(data => {
+                    this.planetsList.push(... data.map(planet=> planet.details))
+                    this.paginatorLength = this.planetsList.length
+                    return this.store.statePageSize
+                }),
+                mergeMap(pageSize => {
+                    this.currPageSize = pageSize
+                    return this.store.statePageIndex
+                })
+            ).subscribe( pageIndex => {
+                this.pageIndex = pageIndex
                 this.sortData()
-                this.paginatorLength = this.planetsList.length
                 this.sliceDataToPage()
+                this.isDataLoaded = true
             })
     }
 
     ngOnDestroy() {
-        this.statePageIndexSubscription.unsubscribe()
-        this.planetsCacheSubscription.unsubscribe()
+        this.storeSubscription.unsubscribe()
         this.queryMax767Sub.unsubscribe()
         this.queryMin767Sub.unsubscribe()
     }
