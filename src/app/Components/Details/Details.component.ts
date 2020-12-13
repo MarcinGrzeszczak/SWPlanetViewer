@@ -28,7 +28,7 @@ export class DetailsComponent implements OnInit {
           this.films.isLoaded = true
         },
         error => {
-          console.log(error)
+          this.store.planetNotFoundSub.next(true)
         })
     
     this.store.getResidents(planetName).subscribe(
@@ -37,7 +37,7 @@ export class DetailsComponent implements OnInit {
         this.residents.isLoaded = true
       },
       error => {
-        console.log(error)
+        this.store.planetNotFoundSub.next(true)
       }
     )
 
