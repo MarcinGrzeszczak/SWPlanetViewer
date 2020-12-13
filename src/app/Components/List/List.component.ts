@@ -61,7 +61,6 @@ export class ListComponent implements OnInit, OnDestroy{
         this.queryMin767Sub = 
         this.breakPointObserver.observe(['(min-width:767px)']).subscribe(dataState => {
             if(dataState.matches){
-                console.log('min 767')
                 this.displyedColumns = this.columns
             }
         })
@@ -76,7 +75,6 @@ export class ListComponent implements OnInit, OnDestroy{
     ngOnInit() {
         this.queries()
         this.statePageIndexSubscription = this.store.statePageIndex.subscribe(num =>{ 
-            console.log(num)
             this.pageIndex = num})
 
         this.planetsCacheSubscription = this.store.getPlanetsCache().subscribe(data => {
@@ -89,7 +87,6 @@ export class ListComponent implements OnInit, OnDestroy{
     }
 
     ngOnDestroy() {
-        console.log('destroyed')
         this.statePageIndexSubscription.unsubscribe()
         this.planetsCacheSubscription.unsubscribe()
         this.queryMax767Sub.unsubscribe()

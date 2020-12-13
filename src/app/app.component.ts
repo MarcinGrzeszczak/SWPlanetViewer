@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PlanetsStoreService } from './Services/PlanetsStore.service';
-import {Planet} from './DataSchemes.model'
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 @Component({

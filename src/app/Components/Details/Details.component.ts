@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PlanetsStoreService } from 'src/app/Services/PlanetsStore.service';
-import {Film,Resident, PlanetDetails} from '../../DataSchemes.model'
-
-
 
 @Component({
   selector: 'app-details',
