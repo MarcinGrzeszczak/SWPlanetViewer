@@ -1,0 +1,39 @@
+.error_content {
+    font-family: StarJediRounded, Roboto, sans-serif;
+    text-align: center;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    width:100%;
+}
+
+.image_container {
+    margin: 0 auto 20px auto;
+    width:40%;
+}
+
+.image_container_480 {
+    width:50%;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.error_text{
+    font-weight: 100;
+    font-size: 450%;
+    transform: translateX(-2%);
+}
+
+.error_text_767{
+    font-size: 250%;
+}
+
+.error_text_480{
+    font-size: 250%;
+}
+
