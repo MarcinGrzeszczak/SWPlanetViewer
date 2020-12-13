@@ -1,10 +1,11 @@
+import { BreakpointObserver } from "@angular/cdk/layout";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { PageEvent } from '@angular/material/paginator';
 import {Router} from '@angular/router';
 import {Subscription } from "rxjs";
 import { PlanetsStoreService } from 'src/app/Services/PlanetsStore.service';
 
-import {PlanetDetails, Planet} from '../../DataSchemes.model'
+import {PlanetDetails} from '../../DataSchemes.model'
 
 @Component({
     selector: 'app-list',
@@ -12,16 +13,19 @@ import {PlanetDetails, Planet} from '../../DataSchemes.model'
     styleUrls: ['./List.component.css']
 })
 export class ListComponent implements OnInit, OnDestroy{
+    private queryMin767Sub: Subscription
+    private queryMax767Sub: Subscription
     private planetsCacheSubscription: Subscription
     private statePageIndexSubscription: Subscription
-    private pageSize = 10
+    private pageSize = 10 
     private planetsList: PlanetDetails[] = []
+    private columns = ['name','climate','gravity','population',]
     pageIndex = 0
     paginatorLength:number = 0
     paginatorSizeOptions:number[] = [5, this.pageSize, 25, 100]
     pageData: PlanetDetails[] = []
     isDataLoaded = false
-    displyedColumns: string[] = ['name','climate','gravity','population']
+    displyedColumns: string[] = []
     
 
     goToDetails(selectedPlanet:PlanetDetails) {
@@ -29,7 +33,10 @@ export class ListComponent implements OnInit, OnDestroy{
         this.router.navigate(['/details', selectedPlanet.name])
     }
 
-    constructor(private router: Router,private store: PlanetsStoreService) {}
+    constructor(
+        private router: Router,
+        private store: PlanetsStoreService, 
+        private breakPointObserver: BreakpointObserver) {}
 
     loadPageData(pageEvent: PageEvent) {
         this.pageIndex = pageEvent.pageIndex
@@ -50,8 +57,24 @@ export class ListComponent implements OnInit, OnDestroy{
         })
     }
 
+    queries() {
+        this.queryMin767Sub = 
+        this.breakPointObserver.observe(['(min-width:767px)']).subscribe(dataState => {
+            if(dataState.matches){
+                console.log('min 767')
+                this.displyedColumns = this.columns
+            }
+        })
+
+        this.queryMax767Sub =
+        this.breakPointObserver.observe(['(max-width: 767px)']).subscribe(dataState => {
+            if(dataState.matches)
+                this.displyedColumns = this.columns.slice(0,3)
+        })
+    }
+
     ngOnInit() {
-        console.log('init')
+        this.queries()
         this.statePageIndexSubscription = this.store.statePageIndex.subscribe(num =>{ 
             console.log(num)
             this.pageIndex = num})
@@ -69,5 +92,7 @@ export class ListComponent implements OnInit, OnDestroy{
         console.log('destroyed')
         this.statePageIndexSubscription.unsubscribe()
         this.planetsCacheSubscription.unsubscribe()
+        this.queryMax767Sub.unsubscribe()
+        this.queryMin767Sub.unsubscribe()
     }
 }
