@@ -12,7 +12,7 @@ export interface ApiPlanetData {
 
 @Injectable({providedIn:'root'})
 export class ApiConnectionService {
-    
+    private CORS_PROXY = 'https://cors-anywhere.herokuapp.com/'
     private API_URL = 'https://swapi.dev/api'
     private API_PLANET_RESOURCE = '/planets'
 
@@ -73,7 +73,7 @@ export class ApiConnectionService {
     }
 
     private fetchData(url: string, params?: HttpParams ) {
-       return this.http.get(url, {
+       return this.http.get(this.CORS_PROXY + url, {
            params,
            headers: {
             "Access-Control-Allow-Origin": "*",
