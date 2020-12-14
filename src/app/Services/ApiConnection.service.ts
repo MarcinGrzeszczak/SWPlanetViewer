@@ -12,17 +12,16 @@ export interface ApiPlanetData {
 
 @Injectable({providedIn:'root'})
 export class ApiConnectionService {
-    private CORS_PROXY = 'https://cors-anywhere.herokuapp.com/'
     private API_URL = 'https://swapi.dev/api'
     private API_PLANET_RESOURCE = '/planets'
 
     constructor(private http: HttpClient) {}
 
     getPlanetPage(page: number = 1): Observable<ApiPlanetData> {
-       const path = this.API_URL + this.API_PLANET_RESOURCE
-       const queryParams = new HttpParams().set('page',`${page}`) 
+       const path = this.API_URL + this.API_PLANET_RESOURCE+`/?page=${page}`
+       //const queryParams = new HttpParams().set('page',`${page}`) 
 
-       return this.fetchPlanet(path, queryParams)
+       return this.fetchPlanet(path)
     }
 
     getPlanetByUrl(url: string): Observable<ApiPlanetData> {
