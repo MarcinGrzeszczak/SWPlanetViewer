@@ -73,12 +73,14 @@ export class ApiConnectionService {
     }
 
     private fetchData(url: string, params?: HttpParams ) {
-       return this.http.get(this.CORS_PROXY + url, {
-           params,
-           headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-           }
-        })
+       let httpsUrl = url 
+       const httpUrl = url.split('://')
+       if(httpUrl[0] === 'http'){
+           httpUrl[0] = 'https'
+           httpsUrl = httpUrl.join('://')
+       } 
+       console.log(url)
+       console.log(httpsUrl)
+       return this.http.get(url, {params})
     }
 }
