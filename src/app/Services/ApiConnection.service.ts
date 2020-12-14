@@ -18,10 +18,8 @@ export class ApiConnectionService {
     constructor(private http: HttpClient) {}
 
     getPlanetPage(page: number = 1): Observable<ApiPlanetData> {
-       const path = this.API_URL + this.API_PLANET_RESOURCE
-       const queryParams = new HttpParams().set('page',`${page}`) 
-
-       return this.fetchPlanet(path, queryParams)
+       const path = this.API_URL + this.API_PLANET_RESOURCE+`/?page=${page}`
+       return this.fetchPlanet(path)
     }
 
     getPlanetByUrl(url: string): Observable<ApiPlanetData> {
