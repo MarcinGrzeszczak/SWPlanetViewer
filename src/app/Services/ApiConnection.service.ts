@@ -12,6 +12,7 @@ export interface ApiPlanetData {
 
 @Injectable({providedIn:'root'})
 export class ApiConnectionService {
+    
     private API_URL = 'https://swapi.dev/api'
     private API_PLANET_RESOURCE = '/planets'
 
@@ -72,6 +73,12 @@ export class ApiConnectionService {
     }
 
     private fetchData(url: string, params?: HttpParams ) {
-       return this.http.get(url, {params})
+       return this.http.get(url, {
+           params,
+           headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+           }
+        })
     }
 }
