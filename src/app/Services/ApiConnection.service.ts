@@ -79,8 +79,6 @@ export class ApiConnectionService {
            httpUrl[0] = 'https'
            httpsUrl = httpUrl.join('://')
        } 
-       console.log(url)
-       console.log(httpsUrl)
-       return this.http.get(url, {params})
+       return this.http.get(httpsUrl, {params})
     }
 }
