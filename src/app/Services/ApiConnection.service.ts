@@ -19,6 +19,7 @@ export class ApiConnectionService {
 
     getPlanetPage(page: number = 1): Observable<ApiPlanetData> {
        const path = this.API_URL + this.API_PLANET_RESOURCE+`/?page=${page}`
+       this.fetchPlanet(path)
        return this.fetchPlanet(path)
     }
 
