@@ -23,17 +23,14 @@ export class PlanetsStoreService {
         const startElement = page * this.pageSize
         const fetchDataFromServer = this.api.getPlanetPage(page).pipe(tap(data=>{
             this.count = data.count
-            console.log(this.count)
             this.planetsStore.push(...data.planets)
         }))
 
         return of(this.planetsStore.slice(startElement, startElement + this.pageSize))
             .pipe(switchMap(data => {
                 if(this.planetsStore.length < this.count || this.planetsStore.length === 0){
-                    console.log(this.planetsStore.length+' '+ this.count)
                     return fetchDataFromServer.pipe(map(planetsData => planetsData.planets))
                 }
-                console.log('ccc')
                 return of(data)
             }))
     }
